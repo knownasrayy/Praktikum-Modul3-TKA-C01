@@ -1,54 +1,84 @@
-# Praktikum Modul 3 - Teknologi Komputasi Awan
+# Praktikum Modul 3: Ansible - Kelompok C01
 
-Selamat datang di repository kelompok **C01** untuk Praktikum Modul 3 Teknologi Komputasi Awan. Project ini berfokus pada implementasi infrastruktur cloud menggunakan Docker dan otomatisasi.
+Repositori ini berisi hasil pengerjaan Praktikum Modul 3 mata kuliah **Teknologi Komputasi Awan (TKA 2026)** mengenai *Infrastructure as Code* (IaC) menggunakan Ansible dan Docker.
 
-## 👥 Anggota Kelompok (C01)
+---
+
+## 👥 Profil Kelompok C01
 
 | No | Nama | NRP | Peran |
 | :--- | :--- | :--- | :--- |
 | 1 | **Rayhan Agnan Kusuma** | 5027241102 | Praktikan 1 (Setup Infra & Docker) |
-| 2 | **Zahra Hafizhah** | 5027241121 | Praktikan 2 |
-| 3 | **Dimas Satya A** | 5027241032 | Praktikan 3 |
+| 2 | **Zahra Hafizhah** | 5027241121 | Praktikan 2 (Deployment Backend) |
+| 3 | **Dimas Satya A** | 5027241032 | Praktikan 3 (Deployment Frontend) |
 
 ---
 
-## 📝 Soal Praktikum
-Praktikum Modul 3 mencakup implementasi aplikasi fullstack (Backend Node.js & Frontend HTML/JS) yang terhubung dengan database PostgreSQL. Fokus utama modul ini adalah:
-1. Dockerization aplikasi (Frontend & Backend).
-2. Orchestration menggunakan Docker Compose.
-3. Otomatisasi deployment (untuk fase selanjutnya).
+## 📋 Ringkasan Tugas
+Tujuan utama praktikum ini adalah melakukan *deployment* simulasi *web login* secara otomatis ke beberapa *node Virtual Machine* (VM) menggunakan Ansible. Aplikasi terdiri dari tiga komponen utama:
+1. **Frontend**: Static HTML/JS served by Nginx.
+2. **Backend**: Node.js Express API.
+3. **Database**: PostgreSQL.
 
 ---
 
-## 🚀 Progres Pengerjaan
+## 🚀 Alur & Progres Pengerjaan
 
-### [Fase 1: Setup Infrastructure & Docker]
-Status: ✅ **Selesai**
+### 1️⃣ Fase 1: Setup Infrastruktur & Docker
+**Status:** ✅ **SELESAI**
+**Tanggung Jawab:** Praktikan 1 (Rayhan)
 
-Pada fase ini, kami telah menyiapkan:
-- **Dockerization Backend**: Membuat Dockerfile untuk API Node.js.
-- **Dockerization Frontend**: Membuat Dockerfile untuk Nginx web server.
-- **Docker Compose**: Orkestrasi Backend, Frontend, dan Database PostgreSQL.
-- **Dokumentasi**: Panduan lengkap cara menjalankan aplikasi baik via Docker maupun Manual.
+Fokus pada instalasi environment dasar dan otomatisasi instalasi Docker Engine menggunakan Ansible.
+- [x] Membuat `inventory.yml` dengan pembagian group node.
+- [x] Menyiapkan *Role* Ansible `docker_setup`.
+- [x] Konfigurasi *Firewall* (hanya port 22 terbuka di awal).
+- [x] Pengujian koneksi (Ping) dan manual Docker "Hello World".
 
-> Detail teknis pengerjaan Fase 1 dapat dilihat pada: **[Pengerjaan Fase1.md](./Pengerjaan%20Fase1.md)**
-
-### [Fase Selanjutnya]
-Status: ⏳ **Pending**
-- *Menunggu instruksi selanjutnya untuk integrasi atau otomatisasi.*
+> **Dokumentasi Lengkap Fase 1:** [Pengerjaan Fase1.md](./Pengerjaan%20Fase1.md)
 
 ---
 
-## 🛠️ Cara Menjalankan
+### 2️⃣ Fase 2: Deployment Backend
+**Status:** ⏳ **PROSES**
+**Tanggung Jawab:** Praktikan 2 (Zahra)
 
-1. Clone repository:
-   ```bash
-   git clone https://github.com/knownasrayy/Praktikum-Modul3-TKA-C01.git
-   ```
-2. Jalankan Docker Compose:
+Fokus pada konfigurasi layanan database dan backend menggunakan Ansible.
+- [ ] Menyiapkan *Role* Ansible `backend_deployment`.
+- [ ] Pengaturan variabel sensitif (db_password, jwt_secret) via Vault.
+- [ ] Build & run container Postgres & Backend via Docker Compose.
+- [ ] Verifikasi Health Check API.
+
+---
+
+### 3️⃣ Fase 3: Deployment Frontend
+**Status:** ⏳ **PROSES**
+**Tanggung Jawab:** Praktikan 3 (Dimas)
+
+Fokus pada penyediaan antarmuka web dan integrasi dengan backend.
+- [ ] Menyiapkan *Role* Ansible `frontend_deployment`.
+- [ ] Konfigurasi `config.js` dinamis menggunakan Template Jinja2.
+- [ ] Deployment Frontend via Docker Compose.
+- [ ] Pengujian UI End-to-End (Register & Login).
+
+---
+
+## 🛠️ Cara Menjalankan (Local Development)
+
+Untuk mencoba aplikasi secara lokal di komputer Anda:
+1. Clone repo ini.
+2. Jalankan perintah:
    ```bash
    docker compose up -d
    ```
-3. Akses aplikasi:
+3. Buka browser:
    - Frontend: `http://localhost:8080`
    - Backend: `http://localhost:3000`
+
+---
+
+## 🗓️ Timeline & Ketentuan
+* **Deadline:** Sabtu, 2 Mei 2026 (23.59 WIB).
+* **Format Pengumpulan:** Video demonstrasi YouTube (Unlisted).
+* **Playlist:** `C01 - TKA 2026`.
+
+Selamat Mengerjakan! 💖

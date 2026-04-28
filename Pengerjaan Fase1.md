@@ -1,93 +1,67 @@
-# Dokumentasi Pengerjaan Fase 1 - Setup Infra & Docker
+# Dokumentasi Pengerjaan Fase 1 - Setup Infra & Docker (Ansible)
 
-Dokumen ini menjelaskan langkah-langkah yang telah dilakukan untuk menyiapkan infrastruktur Docker dan cara menjalankan aplikasi secara manual.
+Dokumen ini berisi detail teknis pengerjaan infrastruktur dasar menggunakan Ansible dan Docker oleh **Praktikan 1 (Rayhan Agnan Kusuma)**.
 
-## 1. Langkah Pengerjaan Dockerization
+## 1. Persiapan Inventory (`inventory.yml`)
+Kami mendaftarkan dua node VM (Multipass) dan membaginya ke dalam dua group berbeda: `backend_nodes` dan `frontend_nodes`.
 
-### A. Backend (`Resource Soal Modul 3/backend/Dockerfile`)
-Dibuat menggunakan image `node:18-alpine` untuk efisiensi ukuran.
-- Menentukan working directory di `/app`.
-- Menyalin `package.json` dan menginstall dependensi.
-- Menyalin seluruh source code.
-- Mengekspos port `3000`.
-
-### B. Frontend (`Resource Soal Modul 3/frontend/Dockerfile`)
-Dibuat menggunakan image `nginx:alpine`.
-- Menyalin file `index.html` dan `config.js` ke direktori default Nginx (`/usr/share/nginx/html`).
-- Mengekspos port `80`.
-
-### C. Orchestration (`docker-compose.yml`)
-Menghubungkan tiga layanan utama:
-1. **db**: PostgreSQL sebagai database.
-2. **backend**: Node.js API yang bergantung pada database.
-3. **frontend**: Nginx sebagai web server untuk UI.
-
----
-
-## 2. Cara Menjalankan Menggunakan Docker (Rekomendasi)
-
-Jika Docker sudah terinstall, jalankan perintah berikut di direktori utama project:
-
-```powershell
-# Membangun image dan menjalankan container di background
-docker compose up -d --build
-
-# Melihat status container
-docker ps
-
-# Melihat log backend (untuk debugging)
-docker logs -f tka-backend
+```yaml
+all:
+  children:
+    backend_nodes:
+      hosts:
+        node_backend:
+          ansible_host: 192.168.x.x # Ganti dengan IP VM Backend
+          ansible_user: ubuntu
+    frontend_nodes:
+      hosts:
+        node_frontend:
+          ansible_host: 192.168.x.x # Ganti dengan IP VM Frontend
+          ansible_user: ubuntu
 ```
 
-Aplikasi dapat diakses di:
-- **Frontend**: `http://localhost:8080`
-- **Backend Health Check**: `http://localhost:3000`
+## 2. Struktur Role Ansible (`roles/docker_setup`)
+Kami membuat role khusus untuk instalasi Docker Engine agar manajemen konfigurasi lebih rapi dan reusable.
+
+Struktur folder:
+- `roles/docker_setup/tasks/main.yml`: Berisi langkah-langkah instalasi.
+- `roles/docker_setup/handlers/main.yml`: Berisi trigger untuk restart service.
+
+## 3. Playbook Instalasi & Firewall
+Playbook ini menjalankan role `docker_setup` dan mengonfigurasi firewall (UFW) untuk keamanan.
+
+### Isi `tasks/main.yml` (Ringkasan):
+1. **Update Repository**: Memastikan list paket OS terbaru.
+2. **Instalasi Docker Engine**: Menginstal `docker-ce`, `docker-ce-cli`, dan `containerd.io`.
+3. **Konfigurasi Firewall (UFW)**:
+   - `ufw allow 22/tcp`: Mengizinkan akses SSH.
+   - `ufw default deny`: Menutup port lainnya secara default.
+   - `ufw enable`: Mengaktifkan firewall.
+4. **Setup User Docker**: Menambahkan user ke group `docker` agar bisa menjalankan perintah tanpa `sudo`.
+
+## 4. Playbook Utama (`main.yml`)
+Digunakan untuk menjalankan seluruh konfigurasi ke semua node.
+
+```yaml
+- name: Setup Docker on all nodes
+  hosts: all
+  become: yes
+  roles:
+    - docker_setup
+```
+
+## 5. Verifikasi & Pengujian
+Setelah Ansible dijalankan, dilakukan pengujian manual:
+1. **Ping Test**: `ansible all -m ping -i inventory.yml` (Memastikan koneksi ke semua VM).
+2. **SSH Test**: Mencoba masuk ke masing-masing node secara manual.
+3. **Hello World**: Menjalankan `docker run hello-world` di masing-masing VM untuk memastikan Docker Engine berjalan sempurna.
 
 ---
 
-## 3. Cara Menjalankan Secara Manual (Tanpa Docker)
+## 🐳 Dockerization Aplikasi (Local Test)
+Sebelum di-deploy via Ansible ke VM, aplikasi telah diuji secara lokal menggunakan Docker Compose:
+- **Backend Dockerfile**: Menggunakan `node:18-alpine`.
+- **Frontend Dockerfile**: Menggunakan `nginx:alpine`.
+- **Docker Compose**: Mengorkestrasi Backend, Frontend, dan Database PostgreSQL.
 
-Jika ingin menjalankan secara manual di sistem lokal, ikuti langkah berikut:
-
-### A. Persiapan Database
-Pastikan PostgreSQL sudah terinstall di komputer kamu.
-1. Buat database baru bernama `db_tka`.
-2. Pastikan user dan password sesuai dengan yang diinginkan.
-
-### B. Menjalankan Backend
-1. Buka terminal di folder `Resource Soal Modul 3/backend`.
-2. Install dependensi:
-   ```powershell
-   npm install
-   ```
-3. Set environment variables (Windows PowerShell):
-   ```powershell
-   $env:DB_HOST="localhost"
-   $env:DB_USER="user_kamu"
-   $env:DB_PASSWORD="password_kamu"
-   $env:DB_NAME="db_tka"
-   $env:JWT_SECRET="supersecretvibe"
-   $env:PORT="3000"
-   ```
-4. Jalankan backend:
-   ```powershell
-   npm start
-   ```
-
-### C. Menjalankan Frontend
-1. Pastikan file `Resource Soal Modul 3/frontend/config.js` berisi:
-   ```javascript
-   const API_BASE_URL = 'http://localhost:3000';
-   ```
-2. Karena frontend hanyalah file HTML statis, kamu bisa membukanya langsung dengan cara:
-   - Klik kanan `index.html` -> **Open with Browser**.
-   - Atau gunakan extension VS Code seperti **Live Server**.
-
----
-
-## Ringkasan Port
-| Service | Port (Docker) | Port (Local Manual) |
-| :--- | :--- | :--- |
-| Frontend | 8080 | Tergantung Live Server (biasanya 5500) |
-| Backend | 3000 | 3000 |
-| Database | 5432 | 5432 |
+> Cara menjalankan local test: `docker compose up -d`
