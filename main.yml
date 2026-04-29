@@ -1,0 +1,5 @@
+- name: Setup Docker on all nodes
+  hosts: all
+  become: yes
+  roles:
+    - docker_setup

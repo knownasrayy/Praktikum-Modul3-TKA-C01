@@ -1,0 +1,12 @@
+all:
+  children:
+    backend_nodes:
+      hosts:
+        node_backend:
+          ansible_host: 192.168.x.x # Ganti dengan IP VM Backend
+          ansible_user: ubuntu
+    frontend_nodes:
+      hosts:
+        node_frontend:
+          ansible_host: 192.168.x.x # Ganti dengan IP VM Frontend
+          ansible_user: ubuntu
