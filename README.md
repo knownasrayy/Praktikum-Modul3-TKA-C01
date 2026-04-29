@@ -39,8 +39,8 @@ Fokus pada instalasi environment dasar dan otomatisasi instalasi Docker Engine m
 ---
 
 ### 2️⃣ Fase 2: Deployment Backend
-**Status:** ⏳ **PROSES**
-**Tanggung Jawab:** Praktikan 2 (Zahra)
+**Status:** ✅ **SELESAI**
+**Tanggung Jawab:** Praktikan 2 (Rara)
 
 Fokus pada konfigurasi layanan database dan backend menggunakan Ansible.
 - [x] Menyiapkan *Role* Ansible `backend_deployment`.
