@@ -3,3 +3,9 @@
   become: yes
   roles:
     - docker_setup
+
+- name: Deploy Backend pada backend_nodes
+  hosts: backend_nodes
+  become: yes
+  roles:
+    - backend_deployment

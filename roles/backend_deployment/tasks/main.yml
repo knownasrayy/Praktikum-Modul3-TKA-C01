@@ -1,0 +1,45 @@
+---
+- name: Allow backend port {{ backend_port }} on UFW
+  ufw:
+    rule: allow
+    port: "{{ backend_port }}"
+    proto: tcp
+
+- name: Create backend application directory
+  file:
+    path: /opt/backend
+    state: directory
+    mode: '0755'
+
+- name: Copy backend source code to node
+  copy:
+    src: "{{ playbook_dir }}/Resource Soal Modul 3/backend/"
+    dest: /opt/backend/backend/
+    mode: '0644'
+
+- name: Template .env file
+  template:
+    src: .env.j2
+    dest: /opt/backend/.env
+    mode: '0600'
+
+- name: Template docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/backend/docker-compose.yml
+    mode: '0644'
+
+- name: Build dan jalankan backend dengan Docker Compose
+  shell: docker compose up -d --build
+  args:
+    chdir: /opt/backend
+
+- name: Tunggu backend siap (health check)
+  uri:
+    url: "http://localhost:{{ backend_port }}/"
+    method: GET
+    status_code: 200
+  register: health_check
+  retries: 12
+  delay: 10
+  until: health_check.status == 200
