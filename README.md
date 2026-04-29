@@ -43,10 +43,12 @@ Fokus pada instalasi environment dasar dan otomatisasi instalasi Docker Engine m
 **Tanggung Jawab:** Praktikan 2 (Zahra)
 
 Fokus pada konfigurasi layanan database dan backend menggunakan Ansible.
-- [ ] Menyiapkan *Role* Ansible `backend_deployment`.
-- [ ] Pengaturan variabel sensitif (db_password, jwt_secret) via Vault.
-- [ ] Build & run container Postgres & Backend via Docker Compose.
-- [ ] Verifikasi Health Check API.
+- [x] Menyiapkan *Role* Ansible `backend_deployment`.
+- [x] Pengaturan variabel sensitif (db_password, jwt_secret) via Vault.
+- [x] Build & run container Postgres & Backend via Docker Compose.
+- [x] Verifikasi Health Check API.
+
+> **Dokumentasi Lengkap Fase 1:** [Pengerjaan Fase2.md](./Pengerjaan%20Fase2.md)
 
 ---
 
