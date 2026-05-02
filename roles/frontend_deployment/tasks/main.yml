@@ -1,0 +1,45 @@
+---
+- name: Allow frontend port {{ frontend_port }} on UFW
+  ufw:
+    rule: allow
+    port: "{{ frontend_port }}"
+    proto: tcp
+
+- name: Create frontend application directory
+  file:
+    path: /opt/frontend
+    state: directory
+    mode: '0755'
+
+- name: Copy frontend source code to node
+  copy:
+    src: "{{ playbook_dir }}/Resource Soal Modul 3/frontend/"
+    dest: /opt/frontend/frontend/
+    mode: '0644'
+
+- name: Template config.js
+  template:
+    src: config.js.j2
+    dest: /opt/frontend/frontend/config.js
+    mode: '0644'
+
+- name: Template docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/frontend/docker-compose.yml
+    mode: '0644'
+
+- name: Build and run frontend with Docker Compose
+  shell: docker compose up -d --build
+  args:
+    chdir: /opt/frontend
+
+- name: Health check frontend
+  uri:
+    url: "http://localhost:{{ frontend_port }}/"
+    method: GET
+    status_code: 200
+  register: frontend_health
+  retries: 12
+  delay: 5
+  until: frontend_health.status == 200

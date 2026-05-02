@@ -9,3 +9,10 @@
   become: yes
   roles:
     - backend_deployment
+
+- name: Deploy Frontend pada frontend_nodes
+  hosts: frontend_nodes
+  become: yes
+  roles:
+    - frontend_deployment
+    

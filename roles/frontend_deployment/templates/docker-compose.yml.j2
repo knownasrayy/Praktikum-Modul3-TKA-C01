@@ -1,0 +1,7 @@
+services:
+  frontend:
+    build: ./frontend
+    container_name: tka-frontend
+    ports:
+      - "{{ frontend_port }}:80"
+    restart: unless-stopped

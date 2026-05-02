@@ -3,12 +3,12 @@ all:
     backend_nodes:
       hosts:
         node_backend:
-          ansible_host: localhost # Ganti dengan IP VM Backend
+          ansible_host: BACKEND_HOST
+          ansible_port: 22
           ansible_user: ubuntu
-          ansible_connection: local
     frontend_nodes:
       hosts:
         node_frontend:
-          ansible_host: localhost # Ganti dengan IP VM Frontend
+          ansible_host: FRONTEND_HOST
+          ansible_port: 22
           ansible_user: ubuntu
-          ansible_connection: local

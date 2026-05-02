@@ -12,6 +12,7 @@
       - curl
       - gnupg
       - lsb-release
+      - ufw
     state: present
 
 - name: Add Docker GPG key
