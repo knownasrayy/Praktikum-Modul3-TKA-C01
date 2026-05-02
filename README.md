@@ -48,7 +48,7 @@ Fokus pada konfigurasi layanan database dan backend menggunakan Ansible.
 - [x] Build & run container Postgres & Backend via Docker Compose.
 - [x] Verifikasi Health Check API.
 
-> **Dokumentasi Lengkap Fase 1:** [Pengerjaan Fase2.md](./Pengerjaan%20Fase2.md)
+> **Dokumentasi Lengkap Fase 2:** [Pengerjaan Fase2.md](./Pengerjaan%20Fase2.md)
 
 ---
 
@@ -62,6 +62,8 @@ Fokus pada penyediaan antarmuka web dan integrasi dengan backend.
 - [x] Deployment Frontend via Docker Compose.
 - [x] Pengujian UI End-to-End (Register & Login).
 
+> **Dokumentasi Lengkap Fase 3:** [Pengerjaan Fase3.md](./Pengerjaan%20Fase3.md)
+> 
 ---
 
 ## 🛠️ Cara Menjalankan (Local Development)
