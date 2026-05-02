@@ -57,10 +57,10 @@ Fokus pada konfigurasi layanan database dan backend menggunakan Ansible.
 **Tanggung Jawab:** Praktikan 3 (Dimas)
 
 Fokus pada penyediaan antarmuka web dan integrasi dengan backend.
-- [ ] Menyiapkan *Role* Ansible `frontend_deployment`.
-- [ ] Konfigurasi `config.js` dinamis menggunakan Template Jinja2.
-- [ ] Deployment Frontend via Docker Compose.
-- [ ] Pengujian UI End-to-End (Register & Login).
+- [x] Menyiapkan *Role* Ansible `frontend_deployment`.
+- [x] Konfigurasi `config.js` dinamis menggunakan Template Jinja2.
+- [x] Deployment Frontend via Docker Compose.
+- [x] Pengujian UI End-to-End (Register & Login).
 
 ---
 
